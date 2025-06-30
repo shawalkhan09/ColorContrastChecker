@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrast Checker Tool</title>
+    <meta name="description" content="Discover a comprehensive collection of tools for designers and developers. From color palettes to code editors, find everything you need to streamline your workflow.">
+    <meta name="keywords" content="design tools, development tools, web design, color palette, code editor">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --text-color: #333;
+            --background-color: #f4f4f4;
+        }
+        
+        #contrast-checker {
+            max-width: 100%;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            
+        }
+
+        .contrast-checker-header{
+            text-align: center; /* Center the header text */
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em; /* Larger font size for the header */
+            color: var(--primary-color); /* Text color */
+        }
+
+        .contrast-form, .explanation {
+            padding: 20px;
+        }
+
+        .color-input {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0;
+            cursor: pointer;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #3a80d2;
+        }
+        #contrast-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+        #contrast-ratio {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        #compliance-info {
+            font-size: 1rem;
+        }
+        #text-preview {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .compliance-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .explanation {
+            background-color: #f9f9f9;
+            border-top: 2px solid var(--primary-color);
+            margin-top: 40px;
+        }
+        .explanation h3 {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .explanation h3::after {
+            content: '\25BC';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+        .explanation h3.collapsed::after {
+            transform: rotate(-90deg);
+        }
+        .explanation-content {
+            display: none;
+            padding-top: 15px;
+        }
+        .explanation p {
+            margin-bottom: 15px;
+        }
+        .explanation ul, .explanation ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        .explanation a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .explanation a:hover {
+            color: #3a80d2;
+            border-bottom-color: #3a80d2;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media screen and (min-width: 480px) {
+            #contrast-checker {
+                max-width: 450px;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            #contrast-checker {
+                max-width: 600px;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .contrast-form {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .color-input {
+                width: 48%;
+            }
+            #contrast-ratio {
+                font-size: 2rem;
+            }
+            .compliance-status {
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            #contrast-checker {
+                max-width: 800px;
+            }
+            .contrast-form, .explanation {
+                padding: 30px;
+            }
+            input[type="text"] {
+                font-size: 1.1rem;
+            }
+            button {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="contrast-checker">
+            <div class="contrast-checker-header">
+                <h2>Contrast Checker</h2>
+            </div>
+            <div class="contrast-form">
+                <div class="color-input">
+                    <label for="foreground-color">Foreground Color:</label>
+                    <div class="input-group">
+                        <input type="color" id="foreground-color" value="#000000">
+                        <input type="text" id="foreground-text" value="#000000" placeholder="Enter color code">
+                    </div>
+                </div>
+                <div class="color-input">
+                    <label for="background-color">Background Color:</label>
+                    <div class="input-group">
+                        <input type="color" id="background-color" value="#ffffff">
+                        <input type="text" id="background-text" value="#ffffff" placeholder="Enter color code">
+                    </div>
+                </div>
+                <button id="check-contrast">Check Contrast</button>
+            </div>
+            <div id="contrast-result">
+                <div id="contrast-ratio"></div>
+                <div id="compliance-info"></div>
+            </div>
+            <div id="text-preview">
+                <h3>Sample Text</h3>
+                <p>This is how your text will look with the selected colors.</p>
+            </div>
+            <div class="explanation">
+                <h3 id="how-it-works-toggle">How It Works</h3>
+                <div class="explanation-content">
+                    <p>This contrast checker tool helps you determine if your color choices provide sufficient contrast for readability, especially for users with visual impairments. Here's how to use it:</p>
+                    <ol>
+                        <li>Choose a foreground color (usually text color) using the color picker or by entering a hex code.</li>
+                        <li>Choose a background color in the same way.</li>
+                        <li>Click "Check Contrast" to see the results.</li>
+                    </ol>
+                    <p>The tool calculates the contrast ratio between the two colors and checks it against Web Content Accessibility Guidelines (WCAG) 2.0 standards:</p>
+                    <ul>
+                        <li>AA requires a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text.</li>
+                        <li>AAA requires a contrast ratio of at least 7:1 for normal text and 4.5:1 for large text.</li>
+                    </ul>
+                    <p>The contrast ratio is calculated using the following steps:</p>
+                    <ol>
+                        <li>Convert the RGB values of each color to their relative luminance.</li>
+                        <li>Calculate the contrast ratio using these luminance values.</li>
+                    </ol>
+                    <p>For more information on the formulas used, check out these resources:</p>
+                    <ul>
+                        <li><a href="https://www.w3.org/TR/WCAG20-TECHS/G17.html" target="_blank">WCAG 2.0 contrast ratio formula</a></li>
+                        <li><a href="https://www.w3.org/TR/WCAG20-TECHS/G18.html" target="_blank">WCAG 2.0 relative luminance formula</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function getLuminance(hexColor) {
+            const rgb = hexColor.match(/\w\w/g).map(x => parseInt(x, 16) / 255);
+            const [r, g, b] = rgb.map(c => {
+                c = c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+                return c;
+            });
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        }
+
+        function getContrastRatio(lum1, lum2) {
+            return (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
+        }
+
+        function checkCompliance(ratio) {
+            let compliance = {
+                AA: { normalText: false, largeText: false },
+                AAA: { normalText: false, largeText: false }
+            };
+
+            if (ratio >= 7) {
+                compliance.AA.normalText = compliance.AA.largeText = true;
+                compliance.AAA.normalText = compliance.AAA.largeText = true;
+            } else if (ratio >= 4.5) {
+                compliance.AA.normalText = compliance.AA.largeText = true;
+                compliance.AAA.largeText = true;
+            } else if (ratio >= 3) {
+                compliance.AA.largeText = true;
+            }
+
+            return compliance;
+        }
+
+        function updateColorInputs(colorInput, textInput) {
+            colorInput.addEventListener('input', function() {
+                textInput.value = this.value.toUpperCase();
+            });
+
+            textInput.addEventListener('input', function() {
+                const color = this.value.charAt(0) === '#' ? this.value : '#' + this.value;
+                if (/^#[0-9A-F]{6}$/i.test(color)) {
+                    colorInput.value = color;
+                }
+            });
+        }
+
+        updateColorInputs(document.getElementById('foreground-color'), document.getElementById('foreground-text'));
+        updateColorInputs(document.getElementById('background-color'), document.getElementById('background-text'));
+
+        document.getElementById('check-contrast').addEventListener('click', function() {
+            const fgColor = document.getElementById('foreground-color').value;
+            const bgColor = document.getElementById('background-color').value;
+
+            const lum1 = getLuminance(fgColor);
+            const lum2 = getLuminance(bgColor);
+            const contrastRatio = getContrastRatio(lum1, lum2);
+
+            const compliance = checkCompliance(contrastRatio);
+
+            // Update contrast ratio display
+            document.getElementById('contrast-ratio').textContent = `Contrast Ratio: ${contrastRatio.toFixed(2)}:1`;
+
+            // Update compliance info
+            let complianceHtml = '<h4>Compliance Status:</h4>';
+            complianceHtml += `<div class="compliance-status ${compliance.AA.normalText ? 'pass' : 'fail'}">
+                                AA Level (Normal Text): ${compliance.AA.normalText ? 'Pass' : 'Fail'}
+                               </div>`;
+            complianceHtml += `<div class="compliance-status ${compliance.AAA.normalText ? 'pass' : 'fail'}">
+                                AAA Level (Normal Text): ${compliance.AAA.normalText ? 'Pass' : 'Fail'}
+                               </div>`;
+            complianceHtml += `<div class="compliance-status ${compliance.AA.largeText ? 'pass' : 'fail'}">
+                                AA Level (Large Text): ${compliance.AA.largeText ? 'Pass' : 'Fail'}
+                               </div>`;
+            complianceHtml += `<div class="compliance-status ${compliance.AAA.largeText ? 'pass' : 'fail'}">
+                                AAA Level (Large Text): ${compliance.AAA.largeText ? 'Pass' : 'Fail'}
+                               </div>`;
+            
+            document.getElementById('compliance-info').innerHTML = complianceHtml;
+
+            // Update preview
+            const preview = document.getElementById('text-preview');
+            preview.style.backgroundColor = bgColor;
+            preview.style.color = fgColor;
+        });
+
+        // Toggle explanation content
+        document.getElementById('how-it-works-toggle').addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+            const content = document.querySelector('.explanation-content');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
